@@ -1,0 +1,6 @@
+{
+  "extends": ["@lmmmmmm"],
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "off"
+  }
+}
