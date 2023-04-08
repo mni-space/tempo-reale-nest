@@ -42,20 +42,20 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   offer(@ConnectedSocket() client: Socket, @MessageBody() body: OfferMessage) {
     client
       .to(body.to)
-      .emit(MessageTypeEnum.Offer, body);
+      .emit(MessageTypeEnum.Offer, { from: client.id, body });
   }
 
   @SubscribeMessage(MessageTypeEnum.Answer)
   answer(@ConnectedSocket() client: Socket, @MessageBody() body: AnswerMessage) {
     client
       .to(body.to)
-      .emit(MessageTypeEnum.Answer, body);
+      .emit(MessageTypeEnum.Answer, { from: client.id, body });
   }
 
   @SubscribeMessage(MessageTypeEnum.Candidate)
   candidate(@ConnectedSocket() client: Socket, @MessageBody() body: CandidateMessage) {
     client
       .to(body.to)
-      .emit(MessageTypeEnum.Candidate, body);
+      .emit(MessageTypeEnum.Candidate, { from: client.id, body });
   }
 }
