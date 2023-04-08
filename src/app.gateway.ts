@@ -29,34 +29,42 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.sockedIds = this.sockedIds.filter(id => id !== client.id);
-    client.emit(MessageTypeEnum.Leave, client.id);
+    this.server.emit(MessageTypeEnum.Leave, client.id);
   }
 
   @SubscribeMessage(MessageTypeEnum.All)
   all(@ConnectedSocket() client: Socket) {
-    client
-      .to(client.id)
-      .emit(MessageTypeEnum.All, this.sockedIds.filter(id => id !== client.id));
+    const filter = this.sockedIds.filter(id => id !== client.id);
+    client.emit(MessageTypeEnum.All, filter);
   }
 
   @SubscribeMessage(MessageTypeEnum.Offer)
   offer(@ConnectedSocket() client: Socket, @MessageBody() body: OfferMessage) {
-    client
+    this.server
       .to(body.to)
-      .emit(MessageTypeEnum.Offer, { from: client.id, body });
+      .emit(MessageTypeEnum.Offer, {
+        from: client.id,
+        body,
+      });
   }
 
   @SubscribeMessage(MessageTypeEnum.Answer)
   answer(@ConnectedSocket() client: Socket, @MessageBody() body: AnswerMessage) {
-    client
+    this.server
       .to(body.to)
-      .emit(MessageTypeEnum.Answer, { from: client.id, body });
+      .emit(MessageTypeEnum.Answer, {
+        from: client.id,
+        body,
+      });
   }
 
   @SubscribeMessage(MessageTypeEnum.Candidate)
   candidate(@ConnectedSocket() client: Socket, @MessageBody() body: CandidateMessage) {
-    client
+    this.server
       .to(body.to)
-      .emit(MessageTypeEnum.Candidate, { from: client.id, body });
+      .emit(MessageTypeEnum.Candidate, {
+        from: client.id,
+        body,
+      });
   }
 }
