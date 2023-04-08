@@ -33,13 +33,14 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage(MessageTypeEnum.All)
   all(@ConnectedSocket() client: Socket) {
-    client.emit(MessageTypeEnum.All, this.sockedIds.filter(id => id !== client.id));
+    client
+      .to(client.id)
+      .emit(MessageTypeEnum.All, this.sockedIds.filter(id => id !== client.id));
   }
 
   @SubscribeMessage(MessageTypeEnum.Offer)
   offer(@ConnectedSocket() client: Socket, @MessageBody() body: OfferMessage) {
     client
-      .broadcast
       .to(body.to)
       .emit(MessageTypeEnum.Offer, body);
   }
@@ -47,7 +48,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage(MessageTypeEnum.Answer)
   answer(@ConnectedSocket() client: Socket, @MessageBody() body: AnswerMessage) {
     client
-      .broadcast
       .to(body.to)
       .emit(MessageTypeEnum.Answer, body);
   }
@@ -55,7 +55,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage(MessageTypeEnum.Candidate)
   candidate(@ConnectedSocket() client: Socket, @MessageBody() body: CandidateMessage) {
     client
-      .broadcast
       .to(body.to)
       .emit(MessageTypeEnum.Candidate, body);
   }
