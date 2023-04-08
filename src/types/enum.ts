@@ -4,6 +4,7 @@ export enum MessageTypeEnum {
   Disconnect = 'disconnect',
 
   All = 'all',
+  Leave = 'leave',
   Offer = 'offer',
   Answer = 'answer',
   Candidate = 'candidate',

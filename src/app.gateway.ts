@@ -29,6 +29,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.sockedIds = this.sockedIds.filter(id => id !== client.id);
+    client.emit(MessageTypeEnum.Leave, client.id);
   }
 
   @SubscribeMessage(MessageTypeEnum.All)
