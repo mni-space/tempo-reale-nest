@@ -44,7 +44,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       .to(body.to)
       .emit(MessageTypeEnum.Offer, {
         from: client.id,
-        body,
+        ...body,
       });
   }
 
@@ -54,7 +54,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       .to(body.to)
       .emit(MessageTypeEnum.Answer, {
         from: client.id,
-        body,
+        ...body,
       });
   }
 
@@ -64,7 +64,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       .to(body.to)
       .emit(MessageTypeEnum.Candidate, {
         from: client.id,
-        body,
+        ...body,
       });
   }
 }
