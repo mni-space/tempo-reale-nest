@@ -1,6 +1,8 @@
 import {
   ConnectedSocket,
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -9,21 +11,23 @@ import { Server, Socket } from 'socket.io';
 
 import { AnswerMessage, CandidateMessage, MessageTypeEnum, OfferMessage } from './types';
 
-@WebSocketGateway()
-export class AppGateway {
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+  },
+})
+export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
   // store all connected socket ids
   sockedIds: string[] = [];
 
-  @SubscribeMessage(MessageTypeEnum.Connection)
-  connection(@ConnectedSocket() client: Socket) {
+  handleConnection(client: Socket) {
     this.sockedIds.push(client.id);
   }
 
-  @SubscribeMessage(MessageTypeEnum.Disconnect)
-  disconnect(@ConnectedSocket() client: Socket) {
+  handleDisconnect(client: Socket) {
     this.sockedIds = this.sockedIds.filter(id => id !== client.id);
   }
 
