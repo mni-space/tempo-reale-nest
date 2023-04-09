@@ -11,5 +11,5 @@ export interface AnswerMessage extends MessageConnection {
 }
 
 export interface CandidateMessage extends MessageConnection {
-  candidate: RTCIceCandidateInit;
+  candidates: RTCIceCandidateInit[];
 }
